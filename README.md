@@ -1,0 +1,2 @@
+# aws_developer_associate_memo
+aws developer associateの勉強したときのメモ
