@@ -314,8 +314,49 @@ AWSアカウントのルートユーザーとは
   * IAMロールの信頼ポリシーのPrincipal要素に指定したIAMユーザーとIAMロールを削除すると信頼関係は壊れる。
     * 同じ名前でIAMエンティティを作成してもプリンシパルIDが異なるため、同じ名前で再作成した場合はロールの再編集が必要
 * Action:Effect要素で許可または拒否する対象となる特定のアクションを記述する。大文字小文字の区別はされない。各AWSサービスを識別する名前空間（iam,ec2,s3など）でサポートされるアクションが定義されている。
+  * 許可/拒否される特定のアクションを指定する
+  * Statement要素にはAction/NotAction要素が必須
+  * AWSサービスで行うことができるタスクを記述する独自のアクションセットを記述
+  * 有効なアクション名はドキュメントを参照、またはポリシーエディターから選択
+  * 形式："Action":"<各サービスの名前空間>":<アクション名>"
+    * "Action":"ec2:StartInstances"
+    * "Action":["sqs:SendMessage", "sqs:ReceiveMessage"]
+    * "Action":"iam:*AccessKey"
+    * "Action":IAM:listaccesskeys"
+  * 注：複数のアクションを指定可能、ワイルドカード（*）を使用可能、値は大文字小文字の区別なし
 * Resource:Action要素の対象となる特定のリソースをARN形式で記述する。指定したAction（ec2:DescribeInstancesなど）によっては個々のリソースを指定することができず、*（ワイルドカード）を指定する必要がある。
+* Statement要素にはResource/NotResource要素が必須
+* AWSサービスが持つ一連のリソースセットをARN形式で記述
+  * 有効なリソースはドキュメントを参照、またはポリシーエディターから選択
+  * "Resource":"arn:aws:sqs:us-east-2:123456789012:queue1"
+  * "Resource":"arn:iam:123456789012:user/accounting/*"
+  * "Resource":["arn:aws:dynamodb:us-east-2:123456789012:table/books_table",*   "arn:aws:dynamodb:us-east-2:123456789012:table/magagines_table"]
+  * "Resource":"arn:aws:dynnamodb:us-easet-2:123456789012:table/${aws:username}"
+* 注：複数のリソースを指定可能、ワイルドカード（*）を使用可能、JSONポリシー変数を指定可能
 * Condition:ポリシーを実行する条件を指定することができる。Condition要素は条件演算子、ポリシー変数、条件値から構成される
+  * ポリシーが有効になるタイミングの条件を指定する
+  * Condition要素の記述はオプション
+  * 条件キー：条件地に対する評価方法として条件演算子を作用させる演算式を記述
+  * 形式：”Condition”:{<条件演算子>:{<条件キー>:<条件値>}}
+  * 条件演算子
+    * 条件比較のタイプ（文字列条件、数値条件、IPアドレス条件など）を指定する
+    * 条件キーごとに使用できる条件演算子の種類が決まっている
+  * 条件キー
+    * AWSグローバル条件コンテキストキー（"aws:"で始まる）
+      * すべてのサービスで使用可能なキー、一部のサービスでのみ使用可能なキーがある
+    * AWSサービス固有のキー（そのサービス固有の名前（"s3":など）で始まる）
+    * IAMの条件コンテキストキー
+    * "Condition":{"StringEquals":{"aws:username":"johndoe"}}
+    * "Condition":{"StringEqualsIgnoreCase":{"aws:username":"johndoe"}}
+    * "Condition":{"IpAddress":{"aws:SourceIP:["192.0.2.0/24", "203.0.113.0/24"]}}
+    * "Condition":{"StringEquals":{"ec2:ResourceTag/tagkey":"tagvalue"}}
+    * "Condition":{"StringEquals":{"s3:prefix":"projects"}}
+    * "Condition":{"StringEquals":{"iam:PassedToService":"cloudwatch.amazonaws.com"}}
+    * "Condition":{"ForAllValues:StringEquals":{"dynamodb:Attributes:["ID", "Message", "Tags"]}}
+    * "Condition":{"DateGreaterThan":{"aws:CurrentTime:"2019-01-29T12:00:00Z"},"IpAddress":{"aws:SourceIp":["192.168.176.0/24","192.168.143.0/24]}
+      * Condition下のブロックはAND条件、演算子に対する値はOR条件
+      * この例の場合、"20219/1/29の12：00よりあとに、ソースIPアドレス"192.168.176.0/24"もしくは"192.168.143.0/24"のネットワークからアクセスしたリクエスト"を意味する
+    * 注：条件キーは大文字小文字を区別しない、条件値の大文字小文字の区別は使用する条件演算子によって異なる
 
 #### [AWS Identity and Access Management (IAM) Part2](https://www.slideshare.net/AmazonWebServicesJapan/20190130-aws-black-belt-online-seminar-aws-identity-and-access-management-aws-iam-part2)
 
