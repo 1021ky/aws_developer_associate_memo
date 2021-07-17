@@ -289,6 +289,18 @@ VPCから見たOutboundは必ずDirect Connectが優先される
 
 ##### VPCの設定方法
 
+* AWSが提供
+  * マネージメントコンソール
+  * AWS CLI/AWS SDK
+  * AWS CloudFormation
+    * JSON/YAMLテンプレートをもとにAWS環境を構築
+    * AWS CloudFormationデザイナー
+      * GUIでテンプレートの作成が可能
+* サードパーティツール
+  * ansible
+  * terraform
+
+
 #### VPCの実装
 
 #### VPCの運用
