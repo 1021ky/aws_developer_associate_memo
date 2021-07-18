@@ -52,7 +52,7 @@
 * Amazon CloudWatch
 * Auto Scaling
 * Application Load Balancer
-* Key Pairs
+* [Key Pairs](#key-pairs)
 * Security Groups
 * [Amazon VPC（Virtual Private Cloud）](#amazon-vpc（virtual-private-cloud）)
 * Amazon Elastic Storage（EBS）
@@ -87,7 +87,58 @@
     * ARM NeoverseコアのCPU AWS Gravitonプロセッサを搭載
     * ほかファミリと比較して最大45%のコスト削減を期待できる
 
+#### EC2の通信とセキュリティ
 
+##### Key Pairs
+
+* EC2インスタンス上のOSに対する安全な認証を提供する機能
+  * 鍵認証
+  * AWSでは公開鍵のみ保持し、起動時に公開鍵をコピーする
+  * 秘密鍵はユーザーにて適切に管理保管する
+
+##### Security Group
+
+EC2インスタンへのトラフィックを制限するファイアウォール機能
+
+* デフォルトでは全トラフィックが閉じた状態
+* 必要な受信アクセスに対してアクセスルールを定義する
+  * プロトコル（TCP/UDP）
+  * 宛先ポート
+  * アクセス元IP/Security Group
+* ルールをひとまとめにしたテンプレートをSecurity Groupと呼ぶ
+
+##### AWS上でのIPの種類
+
+* Private IP
+  * 必ず割り当てられるIPアドレス
+  * EC2作成時にIPを指定可能（VPCのみ）
+  * Stop/StartしてもIPは変わらず固定（VPCのみ）
+* Public IP
+  * ランダムに割り当てられるPublicIP
+  * Stop/Startすると別のIPが割り当てられる
+  * 割当の有無を変更することも可能（VPCのみ）
+* Elastic IP （EIP）
+  * 別インスタンへ再マップも可能な静的Public IP
+  * Stop/StartしてもIPは変わらず固定（VPCのみ）
+  * 利用していない場合は課金発生
+
+##### Elastic Network Interfaces（ENI）
+
+* VPC上で実現する仮装ネットワークインタフェース
+* 以下をENIに紐づけて維持可能
+  * Private IP
+  * Elastic IP
+  * MACアドレス
+  * セキュリティグループ
+* インスタンスによって割当可能な数が異なる
+
+##### EC2インスタンスのネットワーク帯域について
+
+* EC2間のトラフィックには下記の制限がある
+  * シングルフロー通信：最大5Gbpsまたは10Gbps（同一Cluster Placement Groupの場合）
+  * マルチフロー通信：各インスタンスタイプがもつ通信帯域の最大
+    * 例えばc5n.18xlargeであれば最大100Gbps
+* EC2で5Gbps以上の帯域幅を実現するためには、通信の多重化とマルチコアへの分散を意識する必要がある
 
 ### Amazon ECR（Elastic Container Registry）
 
