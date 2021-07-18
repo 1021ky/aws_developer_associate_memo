@@ -24,7 +24,70 @@
 
 ### Amazon DynamoDB Accelerator(DAX)
 
-### Amazon EC2
+### Amazon EC2（Elastic Compute Cloud）
+
+#### Amazon EC2とは
+
+* 数分で移動して、1時間または秒単位の重量柿傳利用可能なAWSクラウド上の仮想サーバー
+* サーバーの追加・削除・マシンスペック変更も数分で可能
+* 管理者権限（root/Administrator）で利用可能
+* 20の地理的リージョンにある61のアベイラビリティーゾーン（AZ）で運用
+* EC2は任意のリージョン並びにアベイラビリティーゾーンを選択して起動することができる
+  * ただしリージョンによって選択できるインスタンスの種類は一部異なる
+* [Amazon VPC（Virtual Private Cloud）](#amazon-vpc（virtual-private-cloud）)によりクラウド内に独立したプライベートネットワーク空間を構築
+* AWSをと既存環境のハイブリッド構成も実現可能
+* 既存のOS/ミドルウェアが利用可能
+* API経由で構築可能
+#### EC2で利用できるプロセッサーとアーキテクチャ
+
+* intel Xeon Processor（x86-64 arch）
+* AMD EPYC Processor（x86-64 arch）
+  * intelと比較して10％コスト低減
+* AWS Gravion Processor（64-bit Arm arch）
+  * intelと比較して最大45％コスト低減
+
+#### EC2に関連する主要コンポーネント
+
+* Amazon Machine Image(AMI)
+* Amazon CloudWatch
+* Auto Scaling
+* Application Load Balancer
+* Key Pairs
+* Security Groups
+* [Amazon VPC（Virtual Private Cloud）](#amazon-vpc（virtual-private-cloud）)
+* Amazon Elastic Storage（EBS）
+* AWS Management Console
+
+#### EC2インスタンスタイプ
+
+* ネーミングポリシー：{インスタンスファミリー}{インスタンス世代}{（追加機能）}.{インスタンスサイズ}
+  * 例：c5d.xlarge
+* メモリ・I/O、CPUクロック重視、GPU・FPGA搭載、価格重視など特徴に持ったインスタンスファミリーを提供
+* インスタンス世代
+  * 同じインスタンスファミリーでも盛大が進むにつれ数字が大きくなる。
+  * 世代が新しい方は高性能でコストパフォーマンスも高いため、極力最新世代のインスタンス利用が推奨
+
+#### EC2インスタンス追加機能のオプション表記
+
+* d:内蔵ストレージ付加
+* n:ネットワークを強化
+* a:AMDのCPUを搭載
+* その他（従来よりCPU、メモリ搭載量が異なる etc...）
+
+#### EC2インスタンスサイズ
+
+* CPU、メモリ、ネットワークのキャパシティによってインスタンスサイズが分類されている
+  * ネットワークとはNW帯域幅
+  * EBS帯域幅もインスタンスサイズによって異なる
+* 汎用インスタンスの使い分け
+  * T3 Instances 時々高いCPU使用率を必要とする多くのワークロード
+    * T3 は負荷に応じて高いレベルまでCPU性能がバーストする機能を持っているため。
+  * M5/M5a Instances CPU、メモリおよびネットワークリソースそれぞれをバランス良く使用するワークロード
+  * A1 Instances 複数のCPUコアを複数インスタンスにまたがってスケールアウトし、広範なARMエコシステムによってサポートされるワークロード
+    * ARM NeoverseコアのCPU AWS Gravitonプロセッサを搭載
+    * ほかファミリと比較して最大45%のコスト削減を期待できる
+
+
 
 ### Amazon ECR（Elastic Container Registry）
 
@@ -52,7 +115,7 @@
 
 ### Amazon SQS
 
-### Amazon Virtual Private Cloud
+### Amazon VPC（Virtual Private Cloud）
 
 * AWS上にプライベートネットワーク空間を構築
   * 任意のIPアドレスレンジ利用可能
@@ -301,10 +364,48 @@ VPCから見たOutboundは必ずDirect Connectが優先される
   * terraform
 
 
-#### VPCの実装
-
 #### VPCの運用
 
+* VPC Flow Logs
+  * ネットワークトラフィックをキャプチャし、CloudWatch Logs、S3へPublishする機能
+  * ネットワークインタフェースを送信元/送信先とするトラフィックが対象
+  * セキュリティグループとネットワークACLのルールでacepted/rejectされたトラフィックログを取得
+  * キャプチャウインドウと言われる時間枠（約10分間）で収集、プロセッシング、保存
+  * RDS、Redshift、ElasticCache、WorkSpacesのネットワークインタフェーストラフィックも取得可能
+  * 追加料金はなし（CloudWatch Logs、S3の標準料金は課金）
+* VPC Traffic Mirroring
+  * EC2インスタンスのENIからネットワークトラフィックをミラーリングする機能
+  * ネットワークトラフィックのIN/OUTをコピー（ミラー）し、VXLANでカプセル化して宛先に送信
+  * ユースケース
+    * 脅威検出（フォレンジック）
+    * コンテンツモニタリング
+    * 問題判別
+  * VPC Flow Logsには含まれない、パケット内容の取得が可能
+  * 設定要素（リソース）
+    * ソース
+      * VPC Traffic Mirroringミラーを有効化するENI
+      * Mirrorセッションが参照する
+    * フィルタ：
+      * ミラーする対象のパケットを取得して、ターゲットに送る
+      * Mirrorセッションが参照する
+    * ターゲット：
+      * ミラーされたパケットを受け取る
+      * Mirrorセッションが参照する
+    * セッション：
+      * ソース、フィルタ、ターゲットを管理
+* Amazon GuardDutyによる脅威の検知と通知
+  * 脅威
+    * 悪意のあるスキャン
+    * インスタンスへの脅威
+    * アカウントへの脅威
+  * Amazon GuardDutyが参照するデータ
+    * DNS Logs
+    * CloudTrail
+  * 検知結果（Finding）
+    * HIGH, MEDIUM, LOWの3種類
+  * EC2またはIAMにおける脅威を検出
+  * 機械学習による異常検知の仕組み
+  * エージェント、センサー、ネットワークアプライアンスは不要
 
 ### Amazon Cognito
 
