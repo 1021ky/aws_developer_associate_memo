@@ -228,6 +228,55 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 
 #### EC2の運用管理
 
+##### EC2のライフサイクル
+
+* 起動したインスタンスは状態を持つ
+  * Running
+    * 実行中。課金される
+    * StopそうさでStoppedへ、Terminate操作でTerminatedに遷移
+  * Stopped
+    * 停止中。課金されない
+    * Start操作で再度Running状態に遷移
+  * Terminated
+    * 削除済み。Stop/Startはできない
+  * Stopped（Hibernate）
+    * メモリ状態をディスクに書き出した上でインスタンスを停止
+    * 課金はEBSボリュームとアタッチされたEIPの料金だけで停止状態と同じく、時間当たりのインスタンス料金は発生しない。
+    * メモリサイズやEBS速度に応じて停止・再開が可能
+
+##### Amazon CloudWatchによるモニタリング
+
+* AWSサービスのメトリックス監視
+  * メトリックス：CPU使用率などの監視項目
+  * メトリックスは予め定義され、構成済み
+* 各メトリックスに対してアラームを作成可能
+  * しきい値を設定（例：CPU使用率60%以上）
+  * メトリックス値がしきい値を超えたら起こすアクションを定義（例：メールで通知）
+* EC2のログ監視 Amazon CloudWatch Logs
+  * メトリックスとアラームも作成可能
+
+##### スケジュールイベント
+
+
+* リタイア
+  * インスタンスをホストしているハードウェアで回復不可能な障害が検出された場合、インスタンスリタイヤが予定される
+  * スケジュールされたインスタンスには時計マークが表示される
+  * EC2のEventsメニューで一覧表示
+  * DescribeInstanceStatus APIで取得可能
+* 取るべきアクション
+  * リタイア日までにStop->Startを実行
+
+
+##### AutoRecovery
+
+* インスタンスの異常を検知して復旧
+  * インスタンスの異常を2つにわけて検知
+    * StatusCheckFaild_System: インスタンスをホストしているハードウェア側の障害
+    * StatusCheckFaild_Instance: EC2インスタンス内部で障害が発生している
+  * CloudWatchアラームにて「RecoverThisInstance」アクションを設定
+  * アラーム発生時に自動的にEC2インスタンスが再起動される
+    * IPアドレス、インスタンスIDは維持される
+
 ### Amazon ECR（Elastic Container Registry）
 
 ### Amazon ECS（Elastic Container Service）
