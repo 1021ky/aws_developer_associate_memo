@@ -354,7 +354,33 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 
 ### Amazon Route53
 
-### Amazon S3
+### Amazon Simple Storage Service（S3）
+
+[資料](https://www.slideshare.net/AmazonWebServicesJapan/20190220-aws-black-belt-online-seminar-amazon-s3-glacier)
+
+#### Amazon S3とは
+
+* 特徴
+  * 安全
+  * 容量制限なし
+    * 1ファイル最大5TB
+      * `memo` 容量制限はないけど、制約はあるということか
+  * 高い耐久性
+    * 99.999999999%
+  * 低コスト
+    * 月額1GB/約3円
+  * オブジェクトストレージ
+    * オブジェクトそれに付随するメタデータ、そのオブジェクトにアクセスするためのユニークなIDで構成されるデータの倉庫
+    * keyをもとにhttp/httpsでアクセス
+* 利用シーン
+  * データストアから過去のデータを退避
+  * 別のデータストアにロード
+  * クライアントから直接PUT/GETする
+* 用語
+### Amazon S3 Glacier
+
+* 安全性とコスト効率を重視したアーカイブ向けストレージ
+* S3のデータをアーカイブする
 
 ### Amazon SES
 
