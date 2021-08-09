@@ -6,6 +6,9 @@
 
 ### AWS CodeCommit
 
+* プライベートGitリポジトリをホストするマネージド型のソース管理サービス。
+* Gitの標準機能をサポートしているため、既存のGitベースのツールとシームレスに連携する
+
 ### AWS CodeBuild
 
 ### AWS CodeDeploy
