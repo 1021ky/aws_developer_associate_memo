@@ -11,6 +11,112 @@
 
 ### AWS CodeBuild
 
+* フルマネージドなビルドサービスでソースコードのコンパイル、テスト実行、ソフトウェアパッケージの作成を実行
+* 継続的なスケールと同時複数ビルドプロセス
+* サーバーの管理は不要
+* 利用した分のみ支払い（分単位の課金）
+* Amazon CloudWatchによるモニタリング可能
+* 一貫したイミュータブルな環境のために個々のビルドを新規Dockerコンテナで実行
+  * memo github actionと似ている
+* すべてのオフィシャルなAWS CodeBuildイメージにDockerとAWS CLIをインストール済み
+* ニーズに応じてDockerイメージを作成することによってカスタムなビルド環境を提供可能
+
+#### AWS CodeBuildの実行方法
+
+* AWS Mangement Console
+* AWS Command Line Interface
+* AWS Tools and SDKs
+* AWS CodePipeline
+
+#### AWS CodeBuildの仕組み
+
+* 実行されたらビルドプロジェクトでビルド環境を作成
+* ビルドしたらAmazon Simple Storage Service（S3）にアップロード
+* 必要があればAmazon Simple Notification ServiceやAWS Chatbotに通知する
+
+#### ビルドの仕様
+
+* ビルドの仕様はbuildspecファイルに記述するか、ビルドコマンドを書くか
+* buildspec.yml
+  * （必須）buildspecのバージョン: version
+  * コマンドを実行するLinuxユーザー: run-as
+    * 死してしない場合、すべてのコマンドがrootユーザーで実行される
+    * phases ブロックでオーバーライド可能
+      * memo ansibleと似ている
+  * 環境変数: env
+    * 環境変数には以下を指定可能
+      * プレーンテキスト
+      * AWS System Manager Parameter Storeの値
+      * AWS Secrets Managerの値
+    * 利用するシェル
+      * Bash
+      * Powershell.exe, cmd.exe
+    * Git認証ヘルパーを利用するか
+  * プロキシサーバー: proxy
+    * アーティファクトのアップロード時、CloudWatchLogへのログ送信時にプロキシサーバを利用するか個別に定義可能
+    * 明示的なプロキシサーバーを利用する場合、環境変数の設定が必要
+      * HTTP_PROXY, HTTPS_PROXY, NO_PROXY
+  * バッチビルド設定: batch
+    * プロジェクトの同時実行と協調実行の定義を行う
+      * batch/build-graph: バッチ内の他のタスクに依存する一連のタスクを定義（順次実行）
+      * batch/build-list: 同時に実行されるタスクを定義
+      * batch/build-matrix: さまざまな環境と並行して実行されるタスクを定義
+  * （必須）実行するコマンド: phases
+    * ビルドの各段階でCodeBuildが実行するコマンドを記述する
+    * install
+      * パッケージのインストールのみに利用することを推奨
+      * runtime-versionsでランタイムを指定可能
+    * pre_build
+      * ビルド前に実行するコマンドを記述
+      * Amazon ECRへのサインイン、npmの依存関係インストールなど
+    * build
+      * ビルド中に実行するコマンドを記述
+    * post_build
+      * ビルド後に実行するコマンドを記述
+        * ビルドアーティファクトをjar, warにする
+        * DockerイメージをAmazon ECRへPushなど
+  * テストレポート作成: reports
+    * テストレポートの作成をする
+      * テストレポートとコードカバレッジレポートの2種類だせる
+      * テストレポートは JunitXMLをはじめ、Cucumber JSON, NUnitXMLなど
+      * コードカバレッジレポートは、JaCoCoXMLをはじめ、Clover XMLなど
+  * AWS CodeBuildの出力: artifacts
+    * CodeBuildの出力を定義する
+    * アーティファクトの名前、アーティファクトに含めるサブディレクトリとファイルを指定する
+    * secondary-artifactsを利用して、複数のビルド出力アーティファクトを定義することも可能
+  * キャッシュ設定: cache
+    * 複数のビルドホスト間で利用できるキャッシュを保存する
+      * ソースキャッシュ
+        * Gitメタデータをキャッシュ
+        * コミット間の変更のみがPullされる
+      * Dockerレイヤーキャッシュ
+      * カスタムキャッシュ
+        * ディレクトリ指定と限定になるがソースやDockerレイヤー以外の保存ができる
+    * ダウンロードするよりも構築にコストがかかる小規模から中間ビルドアーティファクトに適したオプション
+      * 大規模はネットワーク転送で時間がかかるので不適
+      * Dockerのレイヤーキャッシュには最適ではない
+    * S3、ローカル、キャッシュなしどれかを設定する
+
+
+
+#### CodeBuildの機能
+
+* ローカルマシンでビルドできる
+  * docker Gitが必要
+  * AWS CodeBuildエージェントを使用する
+* AWS Session Managerでビルド環境へアクセスする
+* CodeCommitやGitHubのマークダウンファイルに埋め込み、ビルドステータスを表示することが可能
+* ステータスの通知
+  * 通知ルールを設定してビルド状況の通知を受け取ることが可能
+    * Amazon Simple Notification Service
+      * memo ビルドができたら〜を実行というのがpub/sub形式でできるということかな
+    * AWS Chatbot
+* VPC内のリソースにアクセスする
+  * EC2 Instanceとか
+* 利用料金
+  * インスタンスタイプがあって、それに応じて、メモリvCPUが変わり、ビルド時間あたりの課金も変わる
+
+
 ### AWS CodeDeploy
 
 ### AWS X-Ray
