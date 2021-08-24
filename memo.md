@@ -2,6 +2,9 @@
 
 カテゴリごとにメモしていく
 
+ほぼ[AWS サービス別資料](https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-service-cut/)
+の各資料からの引用であり、読んだことと思ったことを書いています。
+
 ## デプロイ
 
 ### AWS CodeCommit
@@ -196,25 +199,67 @@
     * CodeDeployからAWSリソースを操作するために必要
   * IAMインスタンスプロファイル
     * EC2インスタンスに付与するIAMロール
-    * S3から配布物を取得できるようになる
+    * S3から配布物を取得できるようになるyaru`ya
 
 #### CodeDeploy デプロイメント
 
 
 
 
-
 ### AWS X-Ray
 
-### Amazon CloudWatch
+### Amazon CloudWatch※
 
 ### AWS CodePipeline
 
-### Amazon API Gateway
+### Amazon API Gateway※
 
-### Amazon CloudFront
+#### Amazon API Gatewayの位置づけ
 
-### Amazon DynamoDB
++ インフラの管理（可用性とスケーラビリティ）
++ APIの管理（設定やデプロイの制御）
++ 認証と認可（アクセスの制御）
++ 流量制御と保護（スロットリング）
+
+* バックエンドとなるもの
+  * AWS Lambda
+  * HTTPアクセス先
+  * 各種AWSサービス
+  * インターネット（外部Web）
+#### Amazon API Gatewayの主なユースケース概要
+
+
++ インターネットからアクセス可能なパブリックなWebAPIの基盤を提供する
++ インターネットからアクセス可能なプライベートなWebAPIの基盤を提供する
++ AWSサービス（例：Amazon DynamoDBなど）を独自のWebAPI化する手段として利用する
++ サーバレスアーキテクチャを実現する手段として利用する
+
+#### API Gatewayが扱うAPI
+
+* REST
+  * ステートレス（基本的には）
+  * 単一HTTPメッセージでデータそう純真
+* WebSocket
+  * ステートフル
+  * 1つのコネクションで継続的なデータ送受信が可能
+
+#### API Gatewayが扱うAPI-RESTエンドポイントタイプ
+
+* 3種類のエンドポイントタイプから1つを選択
+* エッジ最適化
+  * 一旦エッジロケーション（CloudFrontディストリビューション）にルーティング
+* リージョン
+  * リージョンに直接ルーティング
+  * リクエスト元が同一リージョンの場合はレイテンシ軽減
+  * CloudFrontとの組み合わせ可能
+* プライベート
+  * Publicからのアクセスはできず、VPC内からAWS PricateLink = VPCエンドポイント経由でのみアクセス可能
+
+
+
+### Amazon CloudFront※
+
+### Amazon DynamoDB※
 
 ### Amazon DynamoDB Accelerator(DAX)
 
@@ -536,7 +581,7 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 
 ### Amazon EFS
 
-### Amazon ElasticCache
+### Amazon ElasticCache※
 
 ### Amazon Fargate
 
@@ -576,11 +621,11 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 * 安全性とコスト効率を重視したアーカイブ向けストレージ
 * S3のデータをアーカイブする
 
-### Amazon SES
+### Amazon SES※
 
-### Amazon SNS（Simple Notification Service）
+### Amazon SNS（Simple Notification Service）※
 
-### Amazon SQS
+### Amazon SQS※
 
 ### Amazon VPC（Virtual Private Cloud）
 
@@ -874,19 +919,19 @@ VPCから見たOutboundは必ずDirect Connectが優先される
   * 機械学習による異常検知の仕組み
   * エージェント、センサー、ネットワークアプライアンスは不要
 
-### Amazon Cognito
+### Amazon Cognito※
 
-### Auto Scaling
+### Auto Scaling※
 
-### AWS CloudFormation
+### AWS CloudFormation※
 
-### AWS CloudTrail
+### AWS CloudTrail※
 
-### AWS Elastic Beanstalk
+### AWS Elastic Beanstalk※
 
-### AWS KMS
+### AWS KMS※
 
-### AWS Lambda
+### AWS Lambda※
 
 ### AWS OpsWorks
 
@@ -896,7 +941,7 @@ VPCから見たOutboundは必ずDirect Connectが優先される
 
 ### AWS Step Functions
 
-### Elastic Load Balancing
+### Elastic Load Balancing※
 
 ## Security, Identity & Compliance
 
