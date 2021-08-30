@@ -366,6 +366,16 @@
 
 ### Amazon CloudFront※
 
+* Contents Delivery Networkのマネージドサービス
+  * 高性能な分散配置
+    * memo 各国に拠点持っているからやれるんだろうな
+  * 高いパフォーマンス
+  * キャパシティアクセスからの開放（予測不可能なスパイクアクセスへの対応）
+  * ビルトインのセキュリティ機能（WAF連携・DDoS対策）
+  * 充実したレポーティング（ログ・ダッシュボード・通知機能）
+  * 完全従量料金
+
+
 ### Amazon DynamoDB※
 
 ### Amazon DynamoDB Accelerator(DAX)
