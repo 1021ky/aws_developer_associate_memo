@@ -212,7 +212,7 @@
 
 ### AWS CodePipeline
 
-### Amazon API Gateway※
+### Amazon API Gateway
 
 #### Amazon API Gatewayの位置づけ
 
