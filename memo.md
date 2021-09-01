@@ -366,6 +366,9 @@
 
 ### Amazon CloudFront※
 
+* ユースケース
+  * 大容量の配信や大量アクセスがあるサイトでの活用
+  * 小規模でもWAF/DDoSなどのセキュリティ対策が必要なサイト
 * Contents Delivery Networkのマネージドサービス
   * 高性能な分散配置
     * memo 各国に拠点持っているからやれるんだろうな
@@ -389,7 +392,26 @@
   * 任意のS3 Bucketに出力可能
   * アクセスログの出力はタイムラグあり
 * ログとレポート
-  * 
+  * Access Log
+    * 複雑なアクセスや利用傾向分析
+    * データの可視化と詳細な障害分析
+    * S3->Amazon Athena->Amazon QuickSightで実現可能
+  * リアルタイムモニター
+    * 障害/異常検知や現状の利用確認に
+    * CloudWatchで実現可能
+  * レポーティング
+    * アクセスや利用状況傾向の確認及び分析
+    * Management Consoleで実現可能
+* AWS Lambda@Edge
+  * Amazon CloudFrontとAWS Lambdaで構成したもの
+  * ユースケース
+    * キャッシュヒット率の向上
+    * コンテンツ生成をエッジで実行
+      * 画像リサイズ、HTMLページ生成
+      * A/Bテスト
+    * セキュリティ
+      * JWT/MD5/SHAトークンハッシュを使用した認証
+      * HSTS/CSPセキュリティヘッダ付与
 ### Amazon DynamoDB※
 
 ### Amazon DynamoDB Accelerator(DAX)
