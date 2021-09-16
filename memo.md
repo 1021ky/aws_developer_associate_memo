@@ -505,6 +505,16 @@
     * name/value型、JSON型などアイテム感で不揃いであっても問題ない
     * 型
       * String.Number/Binary/Boolean/Null/多値（Set）データ/ドキュメントデータ（List/Map）
+    * Partation、Sortに該当するAttibutes意外は事前定義不要
+  * Partation Table
+    * Partation Keyは単体でプライマリキーとして利用できる
+    * 順序は指定しないハッシュインデックスを構築するためのキー
+    * テーブルは、性能を確保するために分割（パーティショニング）される場合がある
+  * Partation Sort Table
+    * PartitionとSortでプライマリキーとすることもできる
+    * 同一のPartation Keyでのデータの並びを保証するためにSortKeyが使われる
+    * Partation Keyの数に上限はない
+      * Local Sencondary Indexesを使用するときはデータサイズ上限あり
 
 ### Amazon DynamoDB Accelerator(DAX)
 
