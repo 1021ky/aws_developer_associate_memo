@@ -614,8 +614,23 @@
   * リクエストが減ったときに自動的に容量を縮小
   * マネージメントコンソールから可視化された状態で管理が可能
 
+#### Amazon DynamoDB Accelerator（DAX）
 
-### Amazon DynamoDB Accelerator(DAX)
+* DynamoDBの前におくもの（キャッシュ用？）
+* フルマネージドかつ高可用性
+* DynamoDB API五感
+* Read：読み込みのとき（例GetItemを呼んだ）にキャッシュがなければDynamoDBから直接リードして、DAXのキャッシュにいれてItemを返す
+  * キャッシュヒットしたときはキャッシュのItemを返す
+* Write-through：書き込みがあったときはDynamoDBに書き込んでキャッシュをDAXにいれて、Itemを返す
+* Scalable：最大10ノードまでスケールアウト対応
+  * Scale-upも可能
+* ユースケース
+  * 予期せぬ急激なアクセスがある場合
+  * マイクロセカンド単位でレスポンスを早めたい場合
+* 価格
+  * 使用時間に応じて課金
+  * インスタンスタイプによって単位時間あたりの価格は異なる
+
 
 ### Amazon EC2（Elastic Compute Cloud）
 
