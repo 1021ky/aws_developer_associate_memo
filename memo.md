@@ -491,6 +491,22 @@
     * DescribeStream
     * GetShardIterator
     * GetRecords
+  * GetItem、Query、ScanにはConsistent Readというオプションを指定することができ、これを利用するとReadリクエストを受け取るよりも前に成功しているWriteリクエストが反映された結果が返る
+    * Read Capacity Unitを通常の2倍消費する
+  * Conditional Write
+    * キーにマッチするレコードが存在したら/しなかったら、や、この値が〜以上/以下だったらという条件付き書き込み/更新ができる
+  * Filter四季による結果の絞り込み
+    * QueryまたはScanでは必要に応じてフィルタ式を指定して、返された結果を絞り込むことができる
+    * Query、Scanの1MBの制限はフィルタ式の適用前に適用
+    * 消費されるキャパシティユニットもフィルタ式を指定しなくても同じ
+  * UpdateItemにおけるAttributeへの操作
+    * Attributeに対して、UpdateItemでPut、Add、Deleteという3種類の操作が可能
+      * Put Attributeを指定した値で更新
+      * Add AttributeがNumber型なら足し算/引き算、Set型ならそのセットに対して値を追加する
+      * Delete 当該Attributeを削除する
+  * Atomic Counter
+    * UpdateItemのAttribute Addを利用することで、Atomicなカウンターを実現することもできる
+
 
 * テーブル構成
   * table ∋ items ∋ attibutes
@@ -559,7 +575,20 @@
     * Burst Capacity
       * DynamoDBはパーティションごとのキャパシティのうち、利用されなかった分を過去300秒分までリザーブ
       * プロビジョン分を超えたバーストトラフィックを処理するために利用する
-
+  * Local Secondary Index（LSI）
+    * Sort Key以外に絞り込み検索を行うkeyを持つことができる
+    * Partition Keyが同一で他のアイテムからの検索のために利用
+    * すべての要素（テーブルとインデックス）の合計サイズを、各ハッシュキーごとに10GBに制限
+      * 元データは同じだが、Partation Keyは同じでSort Keyが違うテーブルを持てる
+        * 両方のテーブルを使うことでより細かい条件で検索できる
+  * Global Secondary Index（GSI）
+    * Partation Key属性の代わりとなる
+    * Partation Keyをまたいで検索を行うためのインデックス
+    * GSIはテーブルとは独立したスループットをプロビジョンして利用するため、Tableの更新とは非同期更新
+  * LSI/GSIの注意点
+    * スループットやストレージ容量を追加で必要
+    * 特にインデックスの数が増えれば増えるほど書き込みコストが上がる
+    * セカンダリインデックスに強く依存するようなテーブル設計であれば、一度RDBで要件を満たせないかを確認してみるのがベター
 
 ### Amazon DynamoDB Accelerator(DAX)
 
