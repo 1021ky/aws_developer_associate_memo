@@ -679,7 +679,14 @@
   * AWS Lambda関数に対するリクエスト回数と実行時間の分のみ支払い
   * AWS Lambda関数がテーブルに関連付けられたストリームに対して行う読み込みについては課金されない
 
+#### 2-Tierアーキテクチャ
 
+* 仮想サーバー（EC2）を利用せずにクライアントから直接AWSのサービスを利用するアーキテクチャのこと
+* 例
+  * モバイルアプリからAmazon Cognitoで認証
+  * モバイルアプリがDynamoDBにデータ保存
+    * 保存されたデータに対してはAWS Lambdaが処理
+  * Amazon SNS Mobile Push でプッシュ通知
 
 ### Amazon EC2（Elastic Compute Cloud）
 
