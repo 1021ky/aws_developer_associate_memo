@@ -631,6 +631,43 @@
   * 使用時間に応じて課金
   * インスタンスタイプによって単位時間あたりの価格は異なる
 
+#### Amazon DynamoDB Streams
+
+* DynamoDBに行われた追加・更新・削除の変更履歴を保持し、取り出し可能
+* 過去24時間以内にそのテーブルのデータに対して行われた変更のストリーム全てアクセス可能
+* 24時間経過したストリームデータはその後消去される
+* DynamoDB Streamsの容量は自動的に管理
+* DynamoDB Streamsからの読み取り
+  * DynamoDB SDK、CLIやKCL（Kinesis Client Library）を用いて読み取り可能
+  * DynamoDBテーブルのWriteプロビジョニングスループットの最大2倍の速度で、DynamoDB Streamsから更新を読み取ることが可能
+    * DynamoDBテーブルにプロビジョニングを十分にしていることが必要
+    * 1秒間に1000項目を更新するのに充分な能力をプロビジョニングしていたら1秒間に最大2000件の更新をDynamoDB Streamsから読み取ることができる
+  * DynamoDBへの変更は1秒未満で反映される
+* DynamoDB Streamsのユースケース
+  * クロスリージョンレプリケーション
+  * ゲームやソーシャルサイトなどのユーザーの集計、分析、解析のための非同期集計
+  * ユーザーが新しい写真をアップロードするとすぐにサークル内のすべての友人のモバイルデバイスに自動的に通知するモバイルアプリケーションの構築など
+* DynamoDB Streams API
+  * ListStreams
+    * 現在のアカウントのエンドポイントのストリーム記述子（ストリームARN）のリストを返す
+  * DescribeStream
+    * 指定されたストリームの詳細情報を返す
+    * ストリームの現在の状態アマゾンリソース名（ARN）、そのシャードの構成
+  * GetShardIterator
+    * シャードイテレータの位置を返す
+    * シャードのどこからデータを読み始めた以下を指定するために指定する
+  * GetRecords
+    * 指定されたシャード内からのストリームレコードを返す
+    * GetShardIteratorから取得したシャードイテレータを指定する
+    * 1回で最大1MBまたは1000県のストリームレコードを取得可能
+* 利用料金
+  * Streamsの機能を有効化するのは無料
+  * 毎月最初のReadリクエスト250万件は無料
+  * その後は0.0228USD/10万
+* Amazon Kinesisとの連携
+  * Kinesis APIを使い慣れている開発者がDynamoDB Streamsを簡単に利用可能にするライブラリ：KCL（Kinesis Client Library）
+  * StreamからAmazon Kinesis Client Library Applicationにデータを流せるようにでいる
+
 
 ### Amazon EC2（Elastic Compute Cloud）
 
