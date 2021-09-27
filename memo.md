@@ -668,6 +668,18 @@
   * Kinesis APIを使い慣れている開発者がDynamoDB Streamsを簡単に利用可能にするライブラリ：KCL（Kinesis Client Library）
   * StreamからAmazon Kinesis Client Library Applicationにデータを流せるようにでいる
 
+#### Amazon DynamoDB Trigers
+
+* DynamoDBとAWS Lambdaを組み合わせて使えるようにする仕組み
+* ユースケース
+  * DynamoDBへの書き込みに応じて値チェックをしつつ別テーブルの更新やプッシュ通知を実行
+  * DynamoDBの更新状況の監査ログをS3に保存
+  * ゲームデータなどのランキング集計を非同期に実施
+* 料金
+  * AWS Lambda関数に対するリクエスト回数と実行時間の分のみ支払い
+  * AWS Lambda関数がテーブルに関連付けられたストリームに対して行う読み込みについては課金されない
+
+
 
 ### Amazon EC2（Elastic Compute Cloud）
 
