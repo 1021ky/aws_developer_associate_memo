@@ -688,6 +688,17 @@
     * 保存されたデータに対してはAWS Lambdaが処理
   * Amazon SNS Mobile Push でプッシュ通知
 
+#### その他
+
+* 運用
+  * 性能監視はCloud Watchで
+    * キャパシティやレイテンシー、ユーザーエラー、スロットルされた（キャパシティオーバーでエラーを返した）リクエストなど
+* Amazon DynamoDB Connector オブジェクトマッパー
+* DynamoDB Local 開発/テスト用のツール
+  * JARで提供される
+
+
+
 ### Amazon EC2（Elastic Compute Cloud）
 
 #### Amazon EC2とは
