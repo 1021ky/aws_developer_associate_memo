@@ -1057,11 +1057,51 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 * 安全性とコスト効率を重視したアーカイブ向けストレージ
 * S3のデータをアーカイブする
 
-### Amazon SES※
+### Amazon SES（Simple Email Service）※
 
-### Amazon SNS（Simple Notification Service）※
+Emailに特化したサービス
 
-### Amazon SQS※
+
+
+### Amazon SNS（Simple Notification Service）
+
+#### 特徴
+
+* Mobile Pushとpub-sub機能が代表的な機能
+  * Mobile Push（プッシュ通知）
+    * モバイルアプリが起動していなくても通知
+    * モバイルユーザは通知を受け取るか否か選択可能
+    * 通知をきっかけにアプリを起動してもらう
+  * pub-sub
+    * 通知もできるが、分散アプリケーションの結合用途に用いられる
+* MessageやTopicの設定、操作、および送信ができる
+  * Topic：PublisherがMessageを送信し、Subscriberが通知を受信するための通信チャネル
+    * TopicにはTopic Ownerという所有者があり、Access policyを通じて誰がTopicにアクセスできるかを設定できる
+* publish-subscribeで定期的なポーリングがいらないpush通知メカニズムを使ってfan out（一括送信）できる
+  * Amazon CloudWatch EventsをEvent Sourceとして管理
+  * AWS Step Functionsからの発行
+    * Step FunctionsのStateとしてSNS Topicを指定
+  * S3のオブジェクト操作イベントにSNS Topicを指定
+* 送信するものはHTTP/SやEメールなど複数のプロトコルに対応
+  * HTTP/HTTPS
+  * Email
+  * Email-JSON：通知がJSONオブジェクトとして送信される
+  * Amazon SQS：指定されたキューにmessageを投入する（FIFOキューは対象外）
+    * 即時性の必要がない場合や、信頼性向上やバックエンドの負荷やタイミングをコントロールしたい場合に処理をキューイングすることがSQSをつかうことでできる
+  * AWS Lambda：AWSLambda関数にmessageを配信
+  * SMS：SMSテキストメッセージを登録された電話番号に送信
+  * Platform application endpoint：サポートされているプラットフォームにpush通知
+* リトライ
+  * 4段階のRetry Policy（エンドポイント SQS Lambda Email HTTP/Sで値は変わる）
+    * 遅延なしのリトライ（即時）
+    * 最小値遅延間隔でのリトライ：n秒間隔でm回リトライ
+    * バックオフモデル（線形または指数的）を使用したリトライ：n秒からm分迄線形的にl回
+    * 最大遅延間隔でのリトライ：n分間隔でm回
+
+### Amazon SQS（Simple Queue Service）※
+
+Queueサービス
+
 
 ### Amazon VPC（Virtual Private Cloud）
 
