@@ -208,9 +208,13 @@
 
 ### AWS X-Ray
 
+9
+
 ### Amazon CloudWatch※
 
 ### AWS CodePipeline
+
+8
 
 ### Amazon API Gateway
 
@@ -1015,6 +1019,8 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 
 ### Amazon ECS（Elastic Container Service）
 
+7
+
 ### Amazon EFS
 
 ### Amazon ElasticCache※
@@ -1025,6 +1031,7 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 
 ### Amazon Kinesis
 
+6
 ### Amazon RDS
 
 ### Amazon Route53
@@ -1397,25 +1404,80 @@ VPCから見たOutboundは必ずDirect Connectが優先される
 
 ### Amazon Cognito※
 
+* モバイル・Webアプリ向けのユーザ認証を提供するマネージド・サービス
+* ユーザプール
+  * 独自のユーザディレクトリに加え、外部IDプロバイダでのログインに基づき、アプリへのアクセスに利用できるトークンを提供
+    * Congitoトークン（JWT）
+    * 外部IDプロバイダ
+      * Google
+      * Facebook
+      * Amazon
+      * SAML
+      * OpenID Connect
+      * Apple
+  * 利用できるAPIは2セット
+    * Congnito Identity Provider API
+      * ブラウザ/モバイルでユーザ名・パスワードで認証すると、CongnitoにAPIコールしてトークンもらって、アプリAPIサーバにAPIパラメータとトークンでやりとり
+    * Cognito Auth APIとHosted UI
+      * ブラウザ/モバイルでユーザ名・パスワードで認証すると、リダイレクトしてHosted UIでサインインすることになる
+      * 認証はOAuthフローにそう
+    * ユーザプール独自のユーザーを利用しないなら、Congito Auth APIで外部IDプロバイダにサインインするための認可エンドポイントへのリンクのみ載せたUIを使用
+    * ユーザープール独自のユーザ利用して、外部IDプロバイダを利用するなら、Cognito Identity Provider APIとCognito Auth APIでユーザ名とパスワードの入力フォームのあるUIをアプリで用意
+    * ユーザープール独自のユーザ利用して、外部IDプロバイダを利用しないなら、Cognito Identity Provider APIでユーザ名とパスワードの入力フォームのあるUIをアプリで用意し、外部IDプロバイダにサインインするための認可エンドポイントへのリンクを乗せる
+* IDプール（フェデレーテッドアイデンティティ 連携用IDってことかな？）
+  * Cognitoユーザプールに加え、外部IDプロバイダでのログインに基づき、AWSにアクセスできるクレデンシャルを提供
+* 認証後のアクセス
+  * アプリケーションのAPIへのアクセスに利用
+    * サーバでトークンを検証
+    * API Gateway経由
+      * CONGNITO_USER_POOLSオーソライザーつかってREST APIでアクセス
+    * AppSync 経由でアクセス
+      * GraphQLでAppSyncにアクセス
+      * AMAZON_COGNITO_USER_POOLS認証
+      * 認証したらLambdaやDynamoDBにアクセス
+    * ALB経由でアクセス
+      * クライアントからALBアクセス時にCognito認証
+  * トークンをAWSのAPIアクセスにも利用できる
+    * ユーザプールで発行されたIDトークンをCognito IDプールでAWSの一時クレデンシャルを発行できる
+    * クレデンシャルが発行されるIAMロールを指定できる
+* その他
+  * アクセストークン・IDトークン事態は最大1時間の有効期間内に利用可能
+* Amazon CloudTrailでCognito Identity Provider APIはログ記録でされる
+* 催淫したユーザの情報などもログ記録するにはLambdaトリガー内で出力することで実現可能
+
+### AWS AppSync
+
+モバイルアプリとクラウド間のデータ同期を実現
+
 ### Auto Scaling※
 
 ### AWS CloudFormation※
 
-### AWS CloudTrail※
+2
 
+
+### AWS CloudTrail※
+3
 ### AWS Elastic Beanstalk※
 
 ### AWS KMS※
-
+4
 ### AWS Lambda※
 
+5
 ### AWS OpsWorks
 
 ### AWS Secrets Manager
 
+10
 ### AWS Security Token Service(STS)
 
 ### AWS Step Functions
+
+* ワークフローを定義して実行、管理ができるサービス
+* ASL（Amazon Stetes Language）と呼ばれるJSON形式の言語でワークフローを定義する
+  * Stateを定義
+
 
 ### Elastic Load Balancing※
 
