@@ -1569,6 +1569,14 @@ VPCから見たOutboundは必ずDirect Connectが優先される
   * 削除
     * 依存関係を解決しつつリソースをすべて削除
     * データストアはスナップショット取得や保持が可能
+* aws cloudformation コマンド
+  * aws cloudformation package
+    * CloudFormationのテンプレートで参照するファイルをパッケージ化してS3にアップロードして、テンプレートの中のファイル参照箇所をS3のパスに置き換える
+  * aws cloudformation deploy
+    * aws cloudformation packageの処理に加えてテンプレートの内容にそってスタック変更をおこなう
+* dynamic references
+  * AWS Systems ManegerのパラメータストアとAWS Secrets Managerに格納されたデータを動的に参照する機能
+    * DB接続情報などを参照する
 
 ### AWS CloudTrail※
 3
