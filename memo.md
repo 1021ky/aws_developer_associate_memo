@@ -1632,6 +1632,14 @@ VPCから見たOutboundは必ずDirect Connectが優先される
 
 ### AWS Secrets Manager
 
+### AWS System Manager
+
+* パラメータストアという機能でAWSで参照する値を保存できる
+  * 暗号化して値を保持することもできる
+  * 平文で保持することもできる
+  * 最新のAMI IDを参照といった動的な値も取得することができる
+    * CloudFormationからだとParametersの項目でLastAmiIdを、Type : 'AWS::SSM::Parameter::Value'と指定すれば取得できる
+
 10
 ### AWS Security Token Service(STS)
 
