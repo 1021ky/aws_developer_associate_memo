@@ -1637,6 +1637,10 @@ VPCから見たOutboundは必ずDirect Connectが優先される
 5
 ### AWS OpsWorks
 
+* インフラ構成管理サービス
+* ChefやPupeetのマネージド型インスタンスを諒できるようになる
+* ChefやPuppetを使用してEC2インスタンスやオンプレミスのコンピューティング環境でのサーバーの設定、デプロイ、管理を自動化できる
+
 ### AWS Secrets Manager
 
 ### AWS System Manager
