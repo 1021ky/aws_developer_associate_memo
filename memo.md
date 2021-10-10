@@ -1610,7 +1610,9 @@ VPCから見たOutboundは必ずDirect Connectが優先される
   * Sub：入力文字列の変数を指定した値に置き換える
   * FindInMap：AMIをAWSリージョンに関連付ける単一のマップRegionMapを含むMappingsセクションで使用する
   * GetAttr：テンプレート内のリソースから属性の値を返す### AWS CloudTrail※
-3
+* Lambdaのコードをテンプレートにインラインで含めるときはAWS::Lambda::FunctionリソースのCodeプロパティのZipFileパラメータに書く
+* LambdaのコードをS3にアップロードしているときは、テンプレートで、AWS::Lambda::FunctionリソースのCodeプロパティのS3Bucketパラメータを指定する
+
 ### AWS Elastic Beanstalk※
 
 ### AWS KMS※
