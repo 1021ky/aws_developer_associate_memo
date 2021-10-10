@@ -1099,6 +1099,8 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
   * S3 on Outposts
     * オンプレミスのAWS Outposts（AWSのインフラストラクチャとサービスをオンプレミスで実行ためのサービス）環境でのオブジェクトストレージが提供される
     * データをオンプレミスアプリケーションの近くに保持することにより、パフォーマンスに関する厳しい要件を満たすことができる
+* S3 Select簡易なS3データの抽出検索に利用されるサービス
+  * 性能はあまりでない
 
 ### Amazon S3 Glacier
 
@@ -2162,6 +2164,7 @@ SCP AND (
 * AssumeRoleWithSAML：IdPによる認証とSAMLのアサーションをAWSにポストすることでロールを引き受けtemporary security credentialsを取得するためのアクション
   * ※IdP：Identity ProviderSAMLの認証情報を提供する側のこと。認証情報を利用する側をService Provider（SP）と呼ぶ。
 * GetSessionToken：自身で利用するIAMユーザーのtemporary security credentialsを取得するためのアクション
+  * MFAを使用してEC2特定のAWS APIオペレーションへのプログラム呼び出しを保護する場合に使う
 * GetFederationToken：認証を受けたFederatedユーザー（他システムと連携したユーザー？）のtemporary security credentialsを取得するためのアクション
 
 
