@@ -1023,8 +1023,10 @@ EC2インスタンへのトラフィックを制限するファイアウォー�
 
 ### Amazon EFS
 
-### Amazon ElasticCache※
+### Amazon Redshift
 
+* ペタバイト規模の構造化データと半構造化データを高速で管理できる
+* 標準的な SQL を使用できる
 ### Amazon Fargate
 
 ### Amazon Glacier
